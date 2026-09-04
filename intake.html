@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build Your Site — ScoutSite</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%231a7a45%22/><text x=%2216%22 y=%2222%22 font-family=%22Arial%22 font-size=%2214%22 font-weight=%22800%22 text-anchor=%22middle%22 fill=%22%23ffffff%22>SS</text></svg>" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">SS</span>
+        ScoutSite
+      </a>
+    </div>
+  </nav>
+
+  <main class="form-page">
+    <div class="container form-shell wide">
+      <a href="index.html" class="form-back">← Back to ScoutSite</a>
+
+      <div class="form-card">
+        <h1>Let's build your site</h1>
+        <p class="form-intro">Paid? Great — send us everything below and we'll get your recruiting site built. The more detail here, the better your site turns out.</p>
+
+        <div class="form-status" id="form-status"></div>
+        <div class="payment-slot" id="form-slot">
+          <p>This form isn't connected yet — add your Formspree endpoint in <code>assets/js/formspree-config.js</code> to enable submissions.</p>
+        </div>
+
+        <form id="intake-form" novalidate>
+          <div class="field" id="field-fullName">
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" name="fullName" autocomplete="name" required />
+            <div class="field-error">Enter your full name.</div>
+          </div>
+
+          <div class="field-row">
+            <div class="field" id="field-email">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email" required />
+              <div class="field-error">Enter a valid email address.</div>
+            </div>
+            <div class="field" id="field-phone">
+              <label for="phone">Phone number</label>
+              <input type="tel" id="phone" name="phone" autocomplete="tel" required />
+              <div class="field-error">Enter your phone number.</div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field" id="field-package">
+              <label for="package">Package purchased</label>
+              <select id="package" name="package" required>
+                <option value="" disabled>Select a package</option>
+                <option value="basic">Basic</option>
+                <option value="pro">Pro</option>
+                <option value="elite">Elite</option>
+              </select>
+              <div class="field-error">Select the package you paid for.</div>
+            </div>
+            <div class="field" id="field-gradYear">
+              <label for="gradYear">Class of graduation</label>
+              <select id="gradYear" name="gradYear" required>
+                <option value="" disabled selected>Select a year</option>
+              </select>
+              <div class="field-error">Select your graduation year.</div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field" id="field-sport">
+              <label for="sport">Sport &amp; position</label>
+              <input type="text" id="sport" name="sport" placeholder="e.g. Soccer — Midfielder" required />
+              <div class="field-error">Enter your sport and position.</div>
+            </div>
+            <div class="field" id="field-measurables">
+              <label for="measurables">Key measurables</label>
+              <input type="text" id="measurables" name="measurables" placeholder="Height, weight, 40 time, GPA, etc." />
+            </div>
+          </div>
+
+          <div class="field" id="field-bio">
+            <label for="bio">Bio</label>
+            <textarea id="bio" name="bio" placeholder="A few sentences about you as an athlete and student — accomplishments, team, awards, what makes you stand out." required></textarea>
+            <div class="field-error">Tell us a bit about yourself.</div>
+          </div>
+
+          <div class="field" id="field-videoLink">
+            <label for="videoLink">Highlight video link</label>
+            <input type="url" id="videoLink" name="videoLink" placeholder="https://youtube.com/... or https://hudl.com/..." required />
+            <div class="field-hint">YouTube, Hudl, or any link where your main highlight reel is hosted.</div>
+            <div class="field-error">Enter a valid link to your highlight video.</div>
+          </div>
+
+          <div class="field" id="field-moreVideos">
+            <label for="moreVideos">Additional video links (optional)</label>
+            <textarea id="moreVideos" name="moreVideos" placeholder="One link per line — full games, other seasons, alternate angles, etc."></textarea>
+          </div>
+
+          <div class="field" id="field-schedule">
+            <label for="schedule">Upcoming schedule / showcases (optional)</label>
+            <textarea id="schedule" name="schedule" placeholder="Dates, locations and events coaches could come watch you at."></textarea>
+          </div>
+
+          <div class="field" id="field-notes">
+            <label for="notes">Anything else we should know? (optional)</label>
+            <textarea id="notes" name="notes" placeholder="Coach/parent contact info, schools you're targeting, deadlines, anything else."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="submit-btn">Send my info</button>
+          <p class="form-note">We'll follow up by email once your site's ready to review.</p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/tiers.js"></script>
+  <script src="assets/js/formspree-config.js"></script>
+  <script>
+    const gradSelect = document.getElementById("gradYear");
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear; y <= currentYear + 7; y++) {
+      const opt = document.createElement("option");
+      opt.value = String(y);
+      opt.textContent = String(y);
+      gradSelect.appendChild(opt);
+    }
+
+    // Prefill from the signup step, if the browser still has it in this session.
+    const lead = JSON.parse(sessionStorage.getItem("scoutsiteLead") || "null");
+    if (lead) {
+      document.getElementById("fullName").value = lead.fullName || "";
+      document.getElementById("email").value = lead.email || "";
+      document.getElementById("phone").value = lead.phone || "";
+      if (lead.gradYear) document.getElementById("gradYear").value = lead.gradYear;
+      if (lead.tier && TIERS[lead.tier]) document.getElementById("package").value = lead.tier;
+    }
+
+    const form = document.getElementById("intake-form");
+    const submitBtn = document.getElementById("submit-btn");
+    const statusBox = document.getElementById("form-status");
+    const slot = document.getElementById("form-slot");
+
+    function setInvalid(fieldId, invalid) {
+      document.getElementById(fieldId).classList.toggle("invalid", invalid);
+    }
+
+    function showStatus(kind, message) {
+      statusBox.textContent = message;
+      statusBox.className = `form-status show ${kind}`;
+    }
+
+    if (!FORMSPREE_ENDPOINT) {
+      submitBtn.disabled = true;
+    } else {
+      slot.style.display = "none";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!FORMSPREE_ENDPOINT) {
+        showStatus("err", "Submissions aren't connected yet — the site owner needs to add a Formspree endpoint.");
+        return;
+      }
+
+      const required = ["fullName", "email", "phone", "package", "gradYear", "sport", "bio", "videoLink"];
+      let valid = true;
+      for (const name of required) {
+        const el = form[name];
+        const empty = !el.value.trim();
+        setInvalid(`field-${name}`, empty);
+        if (empty) valid = false;
+      }
+
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.value.trim());
+      setInvalid("field-email", !emailOk);
+      if (!emailOk) valid = false;
+
+      let videoOk = true;
+      try { new URL(form.videoLink.value.trim()); } catch { videoOk = false; }
+      setInvalid("field-videoLink", !videoOk);
+      if (!videoOk) valid = false;
+
+      if (!valid) {
+        showStatus("err", "Please fill in the required fields above.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      try {
+        const res = await fetch(FORMSPREE_ENDPOINT, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(form),
+        });
+
+        if (res.ok) {
+          form.reset();
+          sessionStorage.removeItem("scoutsiteLead");
+          showStatus("ok", "Got it! We'll be in touch by email once your site is ready to review.");
+          submitBtn.textContent = "Sent ✓";
+        } else {
+          showStatus("err", "Something went wrong sending that — please try again or email julian.jozwiak@icloud.com directly.");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send my info";
+        }
+      } catch {
+        showStatus("err", "Something went wrong sending that — please try again or email julian.jozwiak@icloud.com directly.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send my info";
+      }
+    });
+  </script>
+</body>
+</html>
