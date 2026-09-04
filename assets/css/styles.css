@@ -16,6 +16,8 @@
 
 * { box-sizing: border-box; }
 
+[hidden] { display: none !important; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -713,6 +715,43 @@ footer {
 .form-status.show { display: block; }
 .form-status.ok { background: rgba(26,122,69,0.1); color: var(--pitch-dark); }
 .form-status.err { background: #fdecec; color: #b3261e; }
+
+.success-view {
+  text-align: center;
+  padding: 12px 0 4px;
+}
+
+.success-check {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--pitch);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+}
+
+.success-check svg {
+  width: 38px;
+  height: 38px;
+}
+
+.success-view h1 {
+  font-size: 24px;
+  margin: 0 0 10px;
+}
+
+.success-view .success-eta {
+  color: var(--muted);
+  font-size: 15px;
+  margin: 0 0 26px;
+}
+
+.success-view .form-back {
+  margin-bottom: 0;
+  display: inline-flex;
+}
 
 .field-row {
   display: grid;

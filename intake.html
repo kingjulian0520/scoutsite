@@ -20,18 +20,30 @@
 
   <main class="form-page">
     <div class="container form-shell wide">
-      <a href="index.html" class="form-back">← Back to ScoutSite</a>
+      <a href="index.html" class="form-back" id="top-back-link">← Back to ScoutSite</a>
 
       <div class="form-card">
-        <h1>Let's build your site</h1>
-        <p class="form-intro">Paid? Great — send us everything below and we'll get your recruiting site built. The more detail here, the better your site turns out.</p>
-
-        <div class="form-status" id="form-status"></div>
-        <div class="payment-slot" id="form-slot">
-          <p>This form isn't connected yet — add your Formspree endpoint in <code>assets/js/formspree-config.js</code> to enable submissions.</p>
+        <div class="success-view" id="success-view" hidden>
+          <div class="success-check">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 13 9 18 20 6"></polyline>
+            </svg>
+          </div>
+          <h1>Form Sent</h1>
+          <p class="success-eta" id="success-eta"></p>
+          <a href="index.html" class="form-back">← Back to ScoutSite</a>
         </div>
 
-        <form id="intake-form" novalidate>
+        <div id="intake-body">
+          <h1>Let's build your site</h1>
+          <p class="form-intro">Paid? Great — send us everything below and we'll get your recruiting site built. The more detail here, the better your site turns out.</p>
+
+          <div class="form-status" id="form-status"></div>
+          <div class="payment-slot" id="form-slot">
+            <p>This form isn't connected yet — add your Formspree endpoint in <code>assets/js/formspree-config.js</code> to enable submissions.</p>
+          </div>
+
+          <form id="intake-form" novalidate>
           <div class="field" id="field-fullName">
             <label for="fullName">Full name</label>
             <input type="text" id="fullName" name="fullName" autocomplete="name" required />
@@ -202,7 +214,8 @@
 
           <button type="submit" class="btn btn-primary" id="submit-btn">Send my info</button>
           <p class="form-note">We'll follow up by email once your site's ready to review.</p>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </main>
@@ -293,6 +306,7 @@
 
       submitBtn.disabled = true;
       submitBtn.textContent = "Sending...";
+      const packageKey = form.package.value;
 
       try {
         const res = await fetch(FORMSPREE_ENDPOINT, {
@@ -304,8 +318,11 @@
         if (res.ok) {
           form.reset();
           sessionStorage.removeItem("scoutsiteLead");
-          showStatus("ok", "Got it! We'll be in touch by email once your site is ready to review.");
-          submitBtn.textContent = "Sent ✓";
+          const days = TIERS[packageKey] ? TIERS[packageKey].days : 5;
+          document.getElementById("success-eta").textContent = `Expected in ${days} business days.`;
+          document.getElementById("intake-body").hidden = true;
+          document.getElementById("top-back-link").hidden = true;
+          document.getElementById("success-view").hidden = false;
         } else {
           showStatus("err", "Something went wrong sending that — please try again or email julian.jozwiak@icloud.com directly.");
           submitBtn.disabled = false;
