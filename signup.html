@@ -142,12 +142,6 @@
       const lead = { tier: tier.key, fullName, email, phone, gradYear };
       sessionStorage.setItem("scoutsiteLead", JSON.stringify(lead));
 
-      const subject = encodeURIComponent(`New ScoutSite ${tier.name} signup — ${fullName}`);
-      const body = encodeURIComponent(
-        `New signup:\n\nPackage: ${tier.name}\nName: ${fullName}\nEmail: ${email}\nPhone: ${phone}\nClass of: ${gradYear}`
-      );
-      window.open(`mailto:julian.jozwiak@icloud.com?subject=${subject}&body=${body}`, "_blank");
-
       location.href = `payment.html?tier=${tier.key}`;
     });
   </script>
