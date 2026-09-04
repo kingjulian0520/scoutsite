@@ -102,9 +102,9 @@
       document.getElementById(fieldId).classList.toggle("invalid", invalid);
     }
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    function checks() {
       const fullName = form.fullName.value.trim();
       const email = form.email.value.trim();
       const emailConfirm = form.emailConfirm.value.trim();
@@ -112,32 +112,56 @@
       const phoneConfirm = form.phoneConfirm.value.trim();
       const gradYear = form.gradYear.value;
 
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      let valid = true;
-
-      setInvalid("field-name", !fullName);
-      if (!fullName) valid = false;
-
       const emailOk = emailPattern.test(email);
-      setInvalid("field-email", !emailOk);
-      if (!emailOk) valid = false;
-
-      const emailsMatch = emailOk && email.toLowerCase() === emailConfirm.toLowerCase();
-      setInvalid("field-emailConfirm", !emailsMatch);
-      if (!emailsMatch) valid = false;
-
       const phoneOk = phoneDigits(phone).length === 10;
-      setInvalid("field-phone", !phoneOk);
-      if (!phoneOk) valid = false;
 
-      const phonesMatch = phoneOk && phoneDigits(phone) === phoneDigits(phoneConfirm);
-      setInvalid("field-phoneConfirm", !phonesMatch);
-      if (!phonesMatch) valid = false;
+      return {
+        name: !!fullName,
+        email: emailOk,
+        emailConfirm: emailOk && email.toLowerCase() === emailConfirm.toLowerCase(),
+        phone: phoneOk,
+        phoneConfirm: phoneOk && phoneDigits(phone) === phoneDigits(phoneConfirm),
+        gradYear: !!gradYear,
+      };
+    }
 
-      setInvalid("field-gradYear", !gradYear);
-      if (!gradYear) valid = false;
+    // Clear a field's red error the moment it becomes valid, without
+    // waiting for another submit click. Only clears — typing doesn't mark
+    // a field invalid on its own. Email/phone confirm fields get
+    // rechecked alongside their primary field since their validity
+    // depends on both.
+    function recheck(...fieldKeys) {
+      const result = checks();
+      for (const key of fieldKeys) {
+        if (result[key]) setInvalid(`field-${key}`, false);
+      }
+    }
 
+    form.fullName.addEventListener("input", () => recheck("name"));
+    form.email.addEventListener("input", () => recheck("email", "emailConfirm"));
+    form.emailConfirm.addEventListener("input", () => recheck("emailConfirm"));
+    form.phone.addEventListener("input", () => recheck("phone", "phoneConfirm"));
+    form.phoneConfirm.addEventListener("input", () => recheck("phoneConfirm"));
+    form.gradYear.addEventListener("change", () => recheck("gradYear"));
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const result = checks();
+      setInvalid("field-name", !result.name);
+      setInvalid("field-email", !result.email);
+      setInvalid("field-emailConfirm", !result.emailConfirm);
+      setInvalid("field-phone", !result.phone);
+      setInvalid("field-phoneConfirm", !result.phoneConfirm);
+      setInvalid("field-gradYear", !result.gradYear);
+
+      const valid = Object.values(result).every(Boolean);
       if (!valid) return;
+
+      const fullName = form.fullName.value.trim();
+      const email = form.email.value.trim();
+      const phone = form.phone.value.trim();
+      const gradYear = form.gradYear.value;
 
       const lead = { tier: tier.key, fullName, email, phone, gradYear };
       sessionStorage.setItem("scoutsiteLead", JSON.stringify(lead));

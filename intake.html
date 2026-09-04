@@ -55,7 +55,7 @@
             <div class="field" id="field-package">
               <label for="package">Package purchased</label>
               <select id="package" name="package" required>
-                <option value="" disabled>Select a package</option>
+                <option value="" disabled selected>Select a package</option>
                 <option value="basic">Basic</option>
                 <option value="pro">Pro</option>
                 <option value="elite">Elite</option>
@@ -243,6 +243,28 @@
       statusBox.className = `form-status show ${kind}`;
     }
 
+    const required = ["fullName", "email", "phone", "package", "gradYear", "sport", "bio", "videoLink"];
+
+    function isFieldValid(name) {
+      const value = form[name].value.trim();
+      if (!value) return false;
+      if (name === "email") return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      if (name === "videoLink") {
+        try { new URL(value); return true; } catch { return false; }
+      }
+      return true;
+    }
+
+    // Clear a field's red error the moment it becomes valid, without
+    // waiting for another submit click. Only clears — it doesn't mark a
+    // field invalid just because the user is mid-typing.
+    for (const name of required) {
+      const el = form[name];
+      const recheck = () => { if (isFieldValid(name)) setInvalid(`field-${name}`, false); };
+      el.addEventListener("input", recheck);
+      el.addEventListener("change", recheck);
+    }
+
     if (!FORMSPREE_ENDPOINT) {
       submitBtn.disabled = true;
     } else {
@@ -257,23 +279,12 @@
         return;
       }
 
-      const required = ["fullName", "email", "phone", "package", "gradYear", "sport", "bio", "videoLink"];
       let valid = true;
       for (const name of required) {
-        const el = form[name];
-        const empty = !el.value.trim();
-        setInvalid(`field-${name}`, empty);
-        if (empty) valid = false;
+        const fieldOk = isFieldValid(name);
+        setInvalid(`field-${name}`, !fieldOk);
+        if (!fieldOk) valid = false;
       }
-
-      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.value.trim());
-      setInvalid("field-email", !emailOk);
-      if (!emailOk) valid = false;
-
-      let videoOk = true;
-      try { new URL(form.videoLink.value.trim()); } catch { videoOk = false; }
-      setInvalid("field-videoLink", !videoOk);
-      if (!videoOk) valid = false;
 
       if (!valid) {
         showStatus("err", "Please fill in the required fields above.");
