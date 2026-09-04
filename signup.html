@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Started — ScoutSite</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%231a7a45%22/><text x=%2216%22 y=%2222%22 font-family=%22Arial%22 font-size=%2214%22 font-weight=%22800%22 text-anchor=%22middle%22 fill=%22%23ffffff%22>SS</text></svg>" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">SS</span>
+        ScoutSite
+      </a>
+    </div>
+  </nav>
+
+  <main class="form-page">
+    <div class="container form-shell">
+      <a href="index.html#pricing" class="form-back">← Back to pricing</a>
+
+      <div class="order-summary">
+        <div>
+          <div class="os-tier" id="os-tier">Basic package</div>
+          <div class="os-sub">One-time build fee</div>
+        </div>
+        <div class="os-price" id="os-price">$0</div>
+      </div>
+
+      <div class="form-card">
+        <h1>Let's get your info</h1>
+        <p class="form-intro">Takes about a minute. We'll email you next with the intake form for your stats, bio and film.</p>
+
+        <form id="signup-form" novalidate>
+          <div class="field" id="field-name">
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" name="fullName" autocomplete="name" required />
+            <div class="field-error">Enter your full name.</div>
+          </div>
+
+          <div class="field" id="field-email">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required />
+            <div class="field-error">Enter a valid email address.</div>
+          </div>
+
+          <div class="field" id="field-emailConfirm">
+            <label for="emailConfirm">Confirm email</label>
+            <input type="email" id="emailConfirm" name="emailConfirm" autocomplete="email" required />
+            <div class="field-error">Emails don't match.</div>
+          </div>
+
+          <div class="field" id="field-phone">
+            <label for="phone">Phone number</label>
+            <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555" autocomplete="tel" required />
+            <div class="field-error">Enter a valid 10-digit phone number.</div>
+          </div>
+
+          <div class="field" id="field-phoneConfirm">
+            <label for="phoneConfirm">Confirm phone number</label>
+            <input type="tel" id="phoneConfirm" name="phoneConfirm" placeholder="(555) 555-5555" autocomplete="tel" required />
+            <div class="field-error">Phone numbers don't match.</div>
+          </div>
+
+          <div class="field" id="field-gradYear">
+            <label for="gradYear">Class of graduation</label>
+            <select id="gradYear" name="gradYear" required>
+              <option value="" disabled selected>Select a year</option>
+            </select>
+            <div class="field-error">Select your graduation year.</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Continue to payment</button>
+          <p class="form-note">We'll double-check your email and phone match here. A texted/emailed verification code isn't set up yet — for now we'll confirm details with you directly before starting your build.</p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/tiers.js"></script>
+  <script>
+    const tier = getTier();
+    document.getElementById("os-tier").textContent = tier.name + " package";
+    document.getElementById("os-price").textContent = formatPrice(tier.price);
+
+    const gradSelect = document.getElementById("gradYear");
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear; y <= currentYear + 7; y++) {
+      const opt = document.createElement("option");
+      opt.value = String(y);
+      opt.textContent = String(y);
+      gradSelect.appendChild(opt);
+    }
+
+    const form = document.getElementById("signup-form");
+    const phoneDigits = (v) => v.replace(/\D/g, "");
+
+    function setInvalid(fieldId, invalid) {
+      document.getElementById(fieldId).classList.toggle("invalid", invalid);
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const fullName = form.fullName.value.trim();
+      const email = form.email.value.trim();
+      const emailConfirm = form.emailConfirm.value.trim();
+      const phone = form.phone.value.trim();
+      const phoneConfirm = form.phoneConfirm.value.trim();
+      const gradYear = form.gradYear.value;
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      let valid = true;
+
+      setInvalid("field-name", !fullName);
+      if (!fullName) valid = false;
+
+      const emailOk = emailPattern.test(email);
+      setInvalid("field-email", !emailOk);
+      if (!emailOk) valid = false;
+
+      const emailsMatch = emailOk && email.toLowerCase() === emailConfirm.toLowerCase();
+      setInvalid("field-emailConfirm", !emailsMatch);
+      if (!emailsMatch) valid = false;
+
+      const phoneOk = phoneDigits(phone).length === 10;
+      setInvalid("field-phone", !phoneOk);
+      if (!phoneOk) valid = false;
+
+      const phonesMatch = phoneOk && phoneDigits(phone) === phoneDigits(phoneConfirm);
+      setInvalid("field-phoneConfirm", !phonesMatch);
+      if (!phonesMatch) valid = false;
+
+      setInvalid("field-gradYear", !gradYear);
+      if (!gradYear) valid = false;
+
+      if (!valid) return;
+
+      const lead = { tier: tier.key, fullName, email, phone, gradYear };
+      sessionStorage.setItem("scoutsiteLead", JSON.stringify(lead));
+
+      const subject = encodeURIComponent(`New ScoutSite ${tier.name} signup — ${fullName}`);
+      const body = encodeURIComponent(
+        `New signup:\n\nPackage: ${tier.name}\nName: ${fullName}\nEmail: ${email}\nPhone: ${phone}\nClass of: ${gradYear}`
+      );
+      window.open(`mailto:julian.jozwiak@icloud.com?subject=${subject}&body=${body}`, "_blank");
+
+      location.href = `payment.html?tier=${tier.key}`;
+    });
+  </script>
+</body>
+</html>

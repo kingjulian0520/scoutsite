@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment — ScoutSite</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%231a7a45%22/><text x=%2216%22 y=%2222%22 font-family=%22Arial%22 font-size=%2214%22 font-weight=%22800%22 text-anchor=%22middle%22 fill=%22%23ffffff%22>SS</text></svg>" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">SS</span>
+        ScoutSite
+      </a>
+    </div>
+  </nav>
+
+  <main class="form-page">
+    <div class="container form-shell">
+      <a href="#" id="back-link" class="form-back">← Back</a>
+
+      <div class="order-summary">
+        <div>
+          <div class="os-tier" id="os-tier">Basic package</div>
+          <div class="os-sub">One-time build fee</div>
+        </div>
+        <div class="os-price" id="os-price">$0</div>
+      </div>
+
+      <div class="form-card">
+        <h1>Almost there</h1>
+        <p class="form-intro">Confirm your details, then continue to Stripe's secure checkout to pay. Card details are entered on Stripe's page, never on ours.</p>
+
+        <ul class="customer-recap" id="customer-recap"></ul>
+
+        <div class="payment-slot" id="payment-slot">
+          <p>Payment isn't connected yet — add your Stripe Payment Link URLs in <code>assets/js/stripe-config.js</code> to enable checkout.</p>
+        </div>
+
+        <a href="#" id="pay-btn" class="btn btn-primary">Continue to secure payment ↗</a>
+        <p class="form-note" id="form-note"></p>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/tiers.js"></script>
+  <script src="assets/js/stripe-config.js"></script>
+  <script>
+    const tier = getTier();
+    document.getElementById("os-tier").textContent = tier.name + " package";
+    document.getElementById("os-price").textContent = formatPrice(tier.price);
+    document.getElementById("back-link").href = `signup.html?tier=${tier.key}`;
+
+    const lead = JSON.parse(sessionStorage.getItem("scoutsiteLead") || "null");
+    const recap = document.getElementById("customer-recap");
+    if (lead && lead.tier === tier.key) {
+      const rows = [
+        ["Name", lead.fullName],
+        ["Email", lead.email],
+        ["Phone", lead.phone],
+        ["Class of", lead.gradYear],
+      ];
+      recap.innerHTML = rows
+        .map(([k, v]) => `<li><span>${k}</span><span>${v}</span></li>`)
+        .join("");
+    } else {
+      recap.innerHTML = `<li><span colspan="2">No signup info found for this package — <a href="signup.html?tier=${tier.key}">go back and fill it in</a>.</span></li>`;
+    }
+
+    document.getElementById("form-note").textContent =
+      `You'll pay ${formatPrice(tier.price)} now for the build. Optional monthly hosting/updates, if you choose it, is set up separately.`;
+
+    const payBtn = document.getElementById("pay-btn");
+    const slot = document.getElementById("payment-slot");
+    const link = STRIPE_PAYMENT_LINKS[tier.key];
+
+    if (link) {
+      slot.style.display = "none";
+      let url = link;
+      if (lead && lead.email) {
+        url += (url.includes("?") ? "&" : "?") + "prefilled_email=" + encodeURIComponent(lead.email);
+      }
+      payBtn.href = url;
+      payBtn.target = "_blank";
+      payBtn.rel = "noopener";
+    } else {
+      payBtn.href = "#";
+      payBtn.classList.add("btn-ghost");
+      payBtn.classList.remove("btn-primary");
+      payBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        alert("Payment isn't connected yet. Add your Stripe Payment Link in assets/js/stripe-config.js.");
+      });
+    }
+  </script>
+</body>
+</html>
