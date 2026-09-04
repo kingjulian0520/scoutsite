@@ -690,6 +690,18 @@ footer {
 
 .form-shell.wide { max-width: 680px; }
 
+.subhead {
+  font-weight: 800;
+  font-size: 14px;
+  margin: 30px 0 6px;
+  color: var(--ink);
+}
+
+.subhead span {
+  font-weight: 500;
+  color: var(--muted);
+}
+
 .form-status {
   display: none;
   border-radius: 10px;

@@ -71,21 +71,110 @@
             </div>
           </div>
 
+          <div class="field" id="field-sport">
+            <label for="sport">Sport &amp; position</label>
+            <input type="text" id="sport" name="sport" placeholder="e.g. Soccer — Midfielder" required />
+            <div class="field-error">Enter your sport and position.</div>
+          </div>
+
+          <p class="subhead">Measurables &amp; background <span>— all optional</span></p>
+
           <div class="field-row">
-            <div class="field" id="field-sport">
-              <label for="sport">Sport &amp; position</label>
-              <input type="text" id="sport" name="sport" placeholder="e.g. Soccer — Midfielder" required />
-              <div class="field-error">Enter your sport and position.</div>
+            <div class="field" id="field-height">
+              <label for="height">Height</label>
+              <input type="text" id="height" name="height" placeholder="e.g. 5'10&quot;" />
             </div>
-            <div class="field" id="field-measurables">
-              <label for="measurables">Key measurables</label>
-              <input type="text" id="measurables" name="measurables" placeholder="Height, weight, 40 time, GPA, etc." />
+            <div class="field" id="field-weight">
+              <label for="weight">Weight</label>
+              <input type="text" id="weight" name="weight" placeholder="e.g. 165 lbs" />
             </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field" id="field-verticalJump">
+              <label for="verticalJump">Vertical jump</label>
+              <input type="text" id="verticalJump" name="verticalJump" placeholder="e.g. 28 in" />
+            </div>
+            <div class="field" id="field-fortyYard">
+              <label for="fortyYard">40-yard dash</label>
+              <input type="text" id="fortyYard" name="fortyYard" placeholder="e.g. 4.8s" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field" id="field-benchPress">
+              <label for="benchPress">Bench press</label>
+              <input type="text" id="benchPress" name="benchPress" placeholder="e.g. 185 lbs" />
+            </div>
+            <div class="field" id="field-squat">
+              <label for="squat">Squat</label>
+              <input type="text" id="squat" name="squat" placeholder="e.g. 275 lbs" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field" id="field-deadlift">
+              <label for="deadlift">Deadlift</label>
+              <input type="text" id="deadlift" name="deadlift" placeholder="e.g. 315 lbs" />
+            </div>
+            <div class="field" id="field-dominantFoot">
+              <label for="dominantFoot">Dominant foot</label>
+              <select id="dominantFoot" name="dominantFoot">
+                <option value="" selected>Select one</option>
+                <option value="Right">Right</option>
+                <option value="Left">Left</option>
+                <option value="Both">Both</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field" id="field-currentGPA">
+              <label for="currentGPA">Current GPA</label>
+              <input type="text" id="currentGPA" name="currentGPA" placeholder="e.g. 3.7" />
+            </div>
+            <div class="field" id="field-compositeGPA">
+              <label for="compositeGPA">Composite GPA</label>
+              <input type="text" id="compositeGPA" name="compositeGPA" placeholder="e.g. 3.5" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field" id="field-currentTeam">
+              <label for="currentTeam">Current team</label>
+              <input type="text" id="currentTeam" name="currentTeam" placeholder="Club or school team name" />
+            </div>
+            <div class="field" id="field-previousTeams">
+              <label for="previousTeams">Previous team(s)</label>
+              <input type="text" id="previousTeams" name="previousTeams" placeholder="Any previous clubs/teams" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field" id="field-school">
+              <label for="school">School</label>
+              <input type="text" id="school" name="school" placeholder="Current school name" />
+            </div>
+            <div class="field" id="field-favoriteSubjects">
+              <label for="favoriteSubjects">Favorite subjects &amp; current classes</label>
+              <input type="text" id="favoriteSubjects" name="favoriteSubjects" placeholder="e.g. Math, Biology — currently taking AP Calc, Spanish III" />
+            </div>
+          </div>
+
+          <div class="field" id="field-extracurriculars">
+            <label for="extracurriculars">Extracurriculars</label>
+            <input type="text" id="extracurriculars" name="extracurriculars" placeholder="Clubs, student government, volunteering, part-time job, etc." />
+          </div>
+
+          <div class="field" id="field-coachComments">
+            <label for="coachComments">Coach comments</label>
+            <textarea id="coachComments" name="coachComments" placeholder="Quotes or comments from your coach about your play."></textarea>
+            <div class="field-hint">Recommended, but don't hold up your submission for it — you can send this later.</div>
           </div>
 
           <div class="field" id="field-bio">
             <label for="bio">Bio</label>
-            <textarea id="bio" name="bio" placeholder="A few sentences about you as an athlete and student — accomplishments, team, awards, what makes you stand out." required></textarea>
+            <textarea id="bio" name="bio" placeholder="A few sentences about you as an athlete and student — accomplishments, awards, what makes you stand out." required></textarea>
             <div class="field-error">Tell us a bit about yourself.</div>
           </div>
 
