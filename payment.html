@@ -66,11 +66,28 @@
         ["Phone", lead.phone],
         ["Class of", lead.gradYear],
       ];
-      recap.innerHTML = rows
-        .map(([k, v]) => `<li><span>${k}</span><span>${v}</span></li>`)
-        .join("");
+      recap.innerHTML = "";
+      for (const [k, v] of rows) {
+        const li = document.createElement("li");
+        const keySpan = document.createElement("span");
+        keySpan.textContent = k;
+        const valSpan = document.createElement("span");
+        valSpan.textContent = v;
+        li.append(keySpan, valSpan);
+        recap.appendChild(li);
+      }
     } else {
-      recap.innerHTML = `<li><span colspan="2">No signup info found for this package — <a href="signup.html?tier=${tier.key}">go back and fill it in</a>.</span></li>`;
+      const li = document.createElement("li");
+      const span = document.createElement("span");
+      span.append("No signup info found for this package — ");
+      const link = document.createElement("a");
+      link.href = `signup.html?tier=${encodeURIComponent(tier.key)}`;
+      link.textContent = "go back and fill it in";
+      span.appendChild(link);
+      span.append(".");
+      li.appendChild(span);
+      recap.innerHTML = "";
+      recap.appendChild(li);
     }
 
     document.getElementById("form-note").textContent =
@@ -87,8 +104,6 @@
         url += (url.includes("?") ? "&" : "?") + "prefilled_email=" + encodeURIComponent(lead.email);
       }
       payBtn.href = url;
-      payBtn.target = "_blank";
-      payBtn.rel = "noopener";
     } else {
       payBtn.href = "#";
       payBtn.classList.add("btn-ghost");
