@@ -28,7 +28,7 @@
       <div class="order-summary">
         <div>
           <div class="os-tier" id="os-tier">Basic package</div>
-          <div class="os-sub">One-time build fee</div>
+          <div class="os-sub" id="os-sub">One-time build fee</div>
         </div>
         <div class="os-price" id="os-price">$0</div>
       </div>
@@ -54,7 +54,8 @@
   <script>
     const tier = getTier();
     document.getElementById("os-tier").textContent = tier.name + " package";
-    document.getElementById("os-price").textContent = formatPrice(tier.price);
+    document.getElementById("os-price").textContent = formatPrice(effectivePrice(tier.price));
+    if (saleIsLive()) document.getElementById("os-sub").textContent = "One-time build fee — Labor Day Sale (20% off)";
     document.getElementById("back-link").href = `signup.html?tier=${tier.key}`;
 
     const lead = JSON.parse(sessionStorage.getItem("scoutsiteLead") || "null");
@@ -91,7 +92,7 @@
     }
 
     document.getElementById("form-note").textContent =
-      `You'll pay ${formatPrice(tier.price)} now for the build. Optional monthly hosting/updates, if you choose it, is set up separately.`;
+      `You'll pay ${formatPrice(effectivePrice(tier.price))} now for the build. Optional monthly hosting/updates, if you choose it, is set up separately.`;
 
     const payBtn = document.getElementById("pay-btn");
     const slot = document.getElementById("payment-slot");

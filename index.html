@@ -28,6 +28,10 @@
     </div>
   </nav>
 
+  <div class="sale-banner" id="sale-banner" hidden>
+    🎉 <strong>Labor Day Sale</strong> — 20% off every package, ends 11:59pm September 7
+  </div>
+
   <header class="hero">
     <div class="container">
       <span class="eyebrow">Built by an athlete who went through this</span>
@@ -196,7 +200,7 @@
         <div class="price-card">
           <h3>Basic</h3>
           <div class="price-sub">For getting a link out fast</div>
-          <div class="price-amount">$129.99 <span>one-time</span></div>
+          <div class="price-amount" data-base-price="129.99"><span class="price-was" hidden></span><span class="price-now">$129.99</span> <span class="price-unit">one-time</span></div>
           <div class="price-hosting">+ $5/mo hosting &amp; updates (optional)</div>
           <ul class="price-list">
             <li><span class="icon">✓</span> Single-page recruiting site</li>
@@ -211,7 +215,7 @@
           <span class="price-badge">Most popular</span>
           <h3>Pro</h3>
           <div class="price-sub">The full recruiting profile</div>
-          <div class="price-amount">$299 <span>one-time</span></div>
+          <div class="price-amount" data-base-price="299"><span class="price-was" hidden></span><span class="price-now">$299</span> <span class="price-unit">one-time</span></div>
           <div class="price-hosting">+ $9/mo hosting &amp; updates (optional)</div>
           <ul class="price-list">
             <li><span class="icon">✓</span> Everything in Basic</li>
@@ -226,7 +230,7 @@
         <div class="price-card">
           <h3>Elite</h3>
           <div class="price-sub">For multi-sport or multi-season recruits</div>
-          <div class="price-amount">$419.99 <span>one-time</span></div>
+          <div class="price-amount" data-base-price="419.99"><span class="price-was" hidden></span><span class="price-now">$419.99</span> <span class="price-unit">one-time</span></div>
           <div class="price-hosting">+ $15/mo hosting &amp; updates (optional)</div>
           <ul class="price-list">
             <li><span class="icon">✓</span> Everything in Pro</li>
@@ -298,6 +302,19 @@
       </div>
     </div>
   </footer>
+
+  <script src="assets/js/tiers.js"></script>
+  <script>
+    if (saleIsLive()) {
+      document.getElementById("sale-banner").hidden = false;
+      document.querySelectorAll(".price-amount[data-base-price]").forEach((el) => {
+        const base = parseFloat(el.dataset.basePrice);
+        el.querySelector(".price-was").textContent = formatPrice(base);
+        el.querySelector(".price-was").hidden = false;
+        el.querySelector(".price-now").textContent = formatPrice(discountedPrice(base));
+      });
+    }
+  </script>
 <!-- Cloudflare Web Analytics -->
   <script defer type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7bf69df6a8fe4eea83c131d445598dbe"}'></script>
   <!-- End Cloudflare Web Analytics -->
