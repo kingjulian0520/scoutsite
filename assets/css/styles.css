@@ -728,6 +728,30 @@ footer {
   background: var(--surface-2);
 }
 
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  accent-color: var(--pitch);
+  flex: none;
+}
+
+.checkbox-label a {
+  color: var(--pitch);
+  text-decoration: underline;
+}
+
+.checkbox-field.invalid .checkbox-label { color: #ff8a80; }
+
 .field .field-hint {
   font-size: 12px;
   color: var(--muted);
@@ -852,3 +876,31 @@ footer {
 
 .customer-recap li { display: flex; justify-content: space-between; gap: 12px; }
 .customer-recap li span:first-child { color: var(--muted); }
+
+/* Legal pages (privacy / terms) */
+.legal .updated {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0 0 30px;
+}
+
+.legal h2 {
+  font-size: 19px;
+  margin: 32px 0 12px;
+}
+
+.legal h2:first-of-type { margin-top: 0; }
+
+.legal p, .legal li {
+  color: var(--ink);
+  font-size: 14.5px;
+  line-height: 1.7;
+  margin: 0 0 14px;
+}
+
+.legal ul {
+  margin: 0 0 14px;
+  padding-left: 20px;
+}
+
+.legal strong { color: var(--ink); }

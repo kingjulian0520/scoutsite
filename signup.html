@@ -76,6 +76,14 @@
             <div class="field-error">Select your graduation year.</div>
           </div>
 
+          <div class="field checkbox-field" id="field-agree">
+            <label class="checkbox-label">
+              <input type="checkbox" id="agree" name="agree" required />
+              <span>I agree to the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a>.</span>
+            </label>
+            <div class="field-error">You need to agree before continuing.</div>
+          </div>
+
           <button type="submit" class="btn btn-primary">Continue to payment</button>
           <p class="form-note">We'll double-check your email and phone match here. A texted/emailed verification code isn't set up yet — for now we'll confirm details with you directly before starting your build.</p>
         </form>
@@ -125,6 +133,7 @@
         phone: phoneOk,
         phoneConfirm: phoneOk && phoneDigits(phone) === phoneDigits(phoneConfirm),
         gradYear: !!gradYear,
+        agree: form.agree.checked,
       };
     }
 
@@ -146,6 +155,7 @@
     form.phone.addEventListener("input", () => recheck("phone", "phoneConfirm"));
     form.phoneConfirm.addEventListener("input", () => recheck("phoneConfirm"));
     form.gradYear.addEventListener("change", () => recheck("gradYear"));
+    form.agree.addEventListener("change", () => recheck("agree"));
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -157,6 +167,7 @@
       setInvalid("field-phone", !result.phone);
       setInvalid("field-phoneConfirm", !result.phoneConfirm);
       setInvalid("field-gradYear", !result.gradYear);
+      setInvalid("field-agree", !result.agree);
 
       const valid = Object.values(result).every(Boolean);
       if (!valid) return;
