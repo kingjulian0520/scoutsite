@@ -13,10 +13,8 @@ const STRIPE_PAYMENT_LINKS = {
 
 // Not wired into any page yet — kept here for when the intake-form email
 // (still to be built) offers hosting/updates as a separate opt-in.
-// Still test-mode placeholders — send the live hosting links when you have
-// them and I'll swap these too.
 const STRIPE_HOSTING_LINKS = {
-  basic: "https://buy.stripe.com/test_28E3cv3BjfIM5xk3wa7N601", // $5/mo
-  pro: "https://buy.stripe.com/test_8x2eVd6Nv2W0bVIfeS7N603", // $9/mo
-  elite: "https://buy.stripe.com/test_cNi6oH3Bj9ko6BogiW7N604", // $15/mo
+  basic: "https://buy.stripe.com/14A8wPa9K9LA6BJebkffy06", // $5/mo
+  pro: "https://buy.stripe.com/28EaEXdlW3nc9NVc3cffy01", // $9/mo
+  elite: "https://buy.stripe.com/cNibJ13Lm0b0e4bd7gffy03", // $15/mo
 };
