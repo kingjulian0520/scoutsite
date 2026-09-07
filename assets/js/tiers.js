@@ -1,8 +1,8 @@
 // Shared tier data for signup.html and payment.html.
 const TIERS = {
-  basic: { name: "Basic", price: 129.99, hosting: 5, days: "4-6" },
-  pro: { name: "Pro", price: 299, hosting: 9, days: "3-5" },
-  elite: { name: "Elite", price: 419.99, hosting: 15, days: "2-4" },
+  basic: { name: "Basic", price: 105.99, hosting: 5, days: "4-6" },
+  pro: { name: "Pro", price: 249.99, hosting: 9, days: "3-5" },
+  elite: { name: "Elite", price: 364.99, hosting: 15, days: "2-4" },
 };
 
 function getTier() {
