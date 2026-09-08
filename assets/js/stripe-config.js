@@ -6,9 +6,9 @@
 // Charged immediately when someone completes signup.html and clicks
 // through on payment.html — the one-time build fee.
 const STRIPE_PAYMENT_LINKS = {
-  basic: "https://buy.stripe.com/28E5kD0zacXM8JR6ISffy00", // $129.99 one-time
-  pro: "https://buy.stripe.com/6oUdR95Tuf5Ue4bgjsffy02", // $299 one-time
-  elite: "https://buy.stripe.com/00waEXgy85vkbW3ebkffy05", // $419.99 one-time
+  basic: "https://buy.stripe.com/8x28wP4PqbTIgcjgjsffy09", // $105.99 one-time
+  pro: "https://buy.stripe.com/bJeaEX95G8Hw6BJgjsffy07", // $249.99 one-time
+  elite: "https://buy.stripe.com/28EfZh1De5vk8JRgjsffy08", // $364.99 one-time
 };
 
 // Not wired into any page yet — kept here for when the intake-form email
